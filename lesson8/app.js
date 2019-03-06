@@ -129,5 +129,5 @@ function endGame(){
 	lifelabel.visible = false;
 	lifetext.visible = false;
 	scoretext.visible = false;
-	scorelabel.visible = `Game over! You scored: ${score}`;
+	scorelabel.text = `Game over! You scored: ${score}`;
 }
