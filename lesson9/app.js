@@ -47,6 +47,7 @@ function create(){
 		player.body.gravity.y = 300;
 		player.body.collideWorldBounds = true;
 
+	//animate the enemy1
 	enemy1 = game.add.sprite(760, 20, 'baddie');
 		enemy1.animations.add('left', [0,1], 10, true);
 		enemy1.animations.add('right', [2,3], 10, true);
@@ -63,10 +64,17 @@ function create(){
 		star.body.gravity.y = 200;
 		star.body.bounce.y = 0.7 + Math.random() * 0.2;
 	}
+	//create keyboard entries
 	cursors = game.input.keyboard.createCursorKeys();
 	//lesson10
 	healths = game.add.physicsGroup();
 	healths.enableBody = true;
+
+	enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+
+	goText = game.add.text(0,0,',style');
+	goText.visible = false;
+	goText.setTextBounds(100,200,800,100);
 
 }
 
@@ -111,11 +119,22 @@ function update(){
 	}
 }
 
+//define collectStar function
 function collectStar(player, star){
+	//update score variable
 	score += 1;
+	//reflect in text
 	scoretext.setText(score);
+
+	//remove the star and reset to the top
 	star.kill();
 	star.reset(Math.floor(Math.random() * 750), 0);
+
+	if(score % 10 == 0){
+		health = healths.create(Math.floor(Math.random() * 750), 0, 'health');
+		health.body.gravity.y = 200;
+		health.body.bounce.y = 0.2;
+	}
 }
 
 function collectHealth(player,health){
@@ -146,10 +165,43 @@ function moveEnemy(){
 
 }
 
+function restartGame(){
+	stars.callAll('kill');
+	healths.callAll('kill');
+	for (var i = 0; i < 12; i++){
+		var star = stars.create(i*70,0,'star');
+		star.body.gravity.y = 200;
+		star.body.bounce.y = 0.7 + Math.random() *0.2;
+	}
+	
+	player.reset(32, 400);
+	score = 0;
+	life = 3;
+	lifetext.setText(life);
+	scorelabel.setText(score);
+	goText.visible = false;
+	scorelabel.visible = true;
+	scoretext.visible = true;
+	lifelabel.visible = true;
+	lifetext.visible = true
+}
+
 function endGame(){
 	player.kill();
 	lifelabel.visible = false;
 	lifetext.visible = false;
 	scoretext.visible = false;
 	scorelabel.text = `Game over! You scored: ${score}`;
+	scorelabel.visible = false;
+	goText.text = `Game over! \n You scored: ${score} \n Press enter key to try again`;
+	goText.visible = true;
+
+	enterKey.onDown.addOnce(restartGame);
+
 }
+
+
+
+
+
+
