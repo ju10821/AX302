@@ -83,7 +83,7 @@ function update(){
 	game.physics.arcade.collide(stars, platforms);
 	game.physics.arcade.collide(enemy1, platforms);
 	//lesson 10
-	game.physics,arcade.collide(healths, platforms);
+	game.physics.arcade.collide(healths, platforms);
 	
 	//reset the player's velocity if no events.
 	player.body.velocity.x = 0;
